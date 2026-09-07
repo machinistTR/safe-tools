@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Image & PDF Converter | Safe Tools</title>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <!-- ZIP Kütüphaneleri -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --success: #22c55e;
+            --zip-btn: #eab308;
+            --zip-btn-hover: #ca8a04;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+
+        .lang-switcher {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.5rem;
+            display: flex;
+            gap: 0.3rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 0.3rem;
+            border-radius: 8px;
+            z-index: 10;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #0f172a;
+        }
+
+        .nav-header {
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .drop-zone {
+            background-color: var(--card-bg);
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--accent);
+            background-color: rgba(30, 41, 59, 0.8);
+        }
+
+        .drop-zone input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .controls {
+            margin-top: 1.5rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        select {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 0.85rem 2rem;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+            color: #fff;
+        }
+
+        .btn:disabled {
+            background-color: var(--border);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .btn-zip {
+            background-color: var(--zip-btn);
+            color: #0f172a;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .btn-zip:hover {
+            background-color: var(--zip-btn-hover);
+            color: #fff;
+        }
+
+        .result-card {
+            margin-top: 1.5rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-color);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .file-name {
+            font-size: 0.9rem;
+            word-break: break-all;
+            text-align: left;
+        }
+
+        .download-single-btn {
+            background-color: var(--success);
+            color: #0f172a;
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switcher">
+        <button class="lang-btn active" id="btn-en" onclick="changeLang('en')">EN</button>
+        <button class="lang-btn" id="btn-tr" onclick="changeLang('tr')">TR</button>
+        <button class="lang-btn" id="btn-de" onclick="changeLang('de')">DE</button>
+    </div>
+
+    <div class="nav-header">
+        <a href="index.html" class="back-link" id="backLink">← Back to Home</a>
+    </div>
+
+    <div class="container">
+        <header>
+            <span class="badge" id="badgeText">⚡ Serverless Processing • 100% Private & Secure</span>
+            <h1 id="mainTitle">Image & PDF Converter</h1>
+            <p id="subTitle">Convert JPG, PNG, and PDF files instantly without uploading to any server.</p>
+        </header>
+
+        <div class="drop-zone" id="dropZone">
+            <span class="icon">📁</span>
+            <h3 id="dropTitle">Drag & Drop Your Files Here</h3>
+            <p style="margin-top: 0.4rem; color: var(--text-muted);" id="dropDesc">Supports JPG, PNG, WEBP, or PDF (Multiple allowed)</p>
+            <input type="file" id="fileInput" accept="image/jpeg, image/png, image/webp, application/pdf" multiple>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="formatSelect" id="targetLabel">Target Format:</label>
+                <select id="formatSelect" disabled>
+                    <option value="" id="optSelect">Please select files first...</option>
+                </select>
+            </div>
+
+            <button class="btn" id="convertBtn" disabled>Convert Files</button>
+        </div>
+
+        <div class="result-card" id="resultCard">
+            <h3 id="resultTitle">🎉 Conversion Completed!</h3>
+            <button class="btn-zip" id="zipBtn" style="display: none;">📦 Download All as ZIP</button>
+            <div class="file-list" id="fileList"></div>
+        </div>
+    </div>
+
+    <footer style="margin-top: 4rem; text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem; color: var(--text-muted); font-size: 0.85rem;">
+        <p id="footerText">© 2026 Safe Tools • <a href="privacy.html" style="color: var(--accent); text-decoration: none;" id="privacyLink">Privacy Policy</a></p>
+    </footer>
+
+    <div id="cookieBanner" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #1e293b; border-top: 1px solid #334155; padding: 1rem; text-align: center; color: #94a3b8; font-size: 0.85rem; z-index: 9999; display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <span id="cookieText">We use cookies to improve user experience and deliver ads. <a href="privacy.html" style="color: #38bdf8; text-decoration: none;" id="cookiePrivacyLink">Privacy Policy</a></span>
+        <button onclick="acceptCookies()" style="background-color: #38bdf8; color: #0f172a; border: none; padding: 0.4rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer;" id="cookieBtn">Got it</button>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        const translations = {
+            en: {
+                pageTitle: "Image & PDF Converter | Safe Tools",
+                backLink: "← Back to Home",
+                badgeText: " Serverless Processing • 100% Private & Secure",
+                mainTitle: "Image & PDF Converter",
+                subTitle: "Convert JPG, PNG, and PDF files instantly without uploading to any server.",
+                dropTitle: "Drag & Drop Your Files Here",
+                dropDesc: "Supports JPG, PNG, WEBP, or PDF (Multiple allowed)",
+                targetLabel: "Target Format:",
+                optSelect: "Please select files first...",
+                convertBtn: "Convert Files",
+                convertingText: "Converting...",
+                resultTitle: "🎉 Conversion Completed!",
+                downloadBtn: "⬇️ Download",
+                zipBtn: "📦 Download All as ZIP",
+                footerText: "© 2026 Safe Tools • ",
+                privacyLink: "Privacy Policy",
+                cookieText: "We use cookies to improve user experience and deliver ads. ",
+                cookiePrivacyLink: "Privacy Policy",
+                cookieBtn: "Got it",
+                invalidFile: "Please select valid image or PDF files!"
+            },
+            tr: {
+                pageTitle: "Görsel & PDF Dönüştürücü | Güvenli Araçlar",
+                backLink: "← Ana Sayfaya Dön",
+                badgeText: " Sunucusuz İşlem • %100 Gizli • %100 Güvenli",
+                mainTitle: "Görsel & PDF Dönüştürücü",
+                subTitle: "JPG, PNG ve PDF dosyalarınızı sunucuya yüklemeden anında dönüştürün.",
+                dropTitle: "Dönüştürmek İstediğiniz Dosyaları Sürükleyin",
+                dropDesc: "JPG, PNG, WEBP veya PDF formatı desteklenir (Çoklu seçim yapılabilir)",
+                targetLabel: "Hedef Format:",
+                optSelect: "Lütfen önce dosya seçin...",
+                convertBtn: "Dosyaları Dönüştür",
+                convertingText: "Dönüştürülüyor...",
+                resultTitle: "🎉 Dönüştürme Tamamlandı!",
+                downloadBtn: "⬇️ İndir",
+                zipBtn: "📦 Hepsini ZIP Olarak İndir",
+                footerText: "© 2026 Güvenli Araçlar • ",
+                privacyLink: "Gizlilik Politikası",
+                cookieText: "Bu sitede deneyimi iyileştirmek ve reklam sunmak amacıyla çerezler kullanılır. ",
+                cookiePrivacyLink: "Gizlilik Politikası",
+                cookieBtn: "Anladım",
+                invalidFile: "Lütfen geçerli görsel veya PDF dosyaları seçin!"
+            },
+            de: {
+                pageTitle: "Bild- & PDF-Konverter | Sichere Werkzeuge",
+                backLink: "← Zurück zur Startseite",
+                badgeText: " Serverlose Verarbeitung • 100% Privat & Sicher",
+                mainTitle: "Bild- & PDF-Konverter",
+                subTitle: "Konvertieren Sie JPG-, PNG- und PDF-Dateien sofort, ohne sie auf einen Server hochzuladen.",
+                dropTitle: "Ziehen Sie Ihre Dateien hierher",
+                dropDesc: "Unterstützt JPG, PNG, WEBP oder PDF (Mehrfachauswahl möglich)",
+                targetLabel: "Zielformat:",
+                optSelect: "Bitte wählen Sie zuerst Dateien...",
+                convertBtn: "Dateien konvertieren",
+                convertingText: "Konvertierung läuft...",
+                resultTitle: "🎉 Konvertierung abgeschlossen!",
+                downloadBtn: "⬇️ Herunterladen",
+                zipBtn: "📦 Alle als ZIP herunterladen",
+                footerText: "© 2026 Sichere Werkzeuge • ",
+                privacyLink: "Datenschutzerklärung",
+                cookieText: "Wir verwenden Cookies, um die Nutzererfahrung zu verbessern und Werbung bereitzustellen. ",
+                cookiePrivacyLink: "Datenschutzerklärung",
+                cookieBtn: "Verstanden",
+                invalidFile: "Bitte wählen Sie gültige Bild- oder PDF-Dateien!"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            document.getElementById('pageTitle').textContent = translations[lang].pageTitle;
+            document.getElementById('backLink').textContent = translations[lang].backLink;
+            document.getElementById('badgeText').textContent = translations[lang].badgeText;
+            document.getElementById('mainTitle').textContent = translations[lang].mainTitle;
+            document.getElementById('subTitle').textContent = translations[lang].subTitle;
+            document.getElementById('dropTitle').textContent = translations[lang].dropTitle;
+            document.getElementById('dropDesc').textContent = translations[lang].dropDesc;
+            document.getElementById('targetLabel').textContent = translations[lang].targetLabel;
+            if(selectedFiles.length === 0) document.getElementById('optSelect').textContent = translations[lang].optSelect;
+            if(!isConverting) document.getElementById('convertBtn').textContent = `${translations[lang].convertBtn} ${selectedFiles.length > 0 ? '(' + selectedFiles.length + ')' : ''}`;
+            document.getElementById('resultTitle').textContent = translations[lang].resultTitle;
+            document.getElementById('zipBtn').textContent = translations[lang].zipBtn;
+
+            document.getElementById('footerText').childNodes[0].textContent = translations[lang].footerText;
+            document.getElementById('privacyLink').textContent = translations[lang].privacyLink;
+            
+            document.getElementById('cookieText').childNodes[0].textContent = translations[lang].cookieText;
+            document.getElementById('cookiePrivacyLink').textContent = translations[lang].cookiePrivacyLink;
+            document.getElementById('cookieBtn').textContent = translations[lang].cookieBtn;
+
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
+            document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+
+            localStorage.setItem('selectedLang', lang);
+        }
+
+        function changeLang(lang) {
+            setLanguage(lang);
+        }
+
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const formatSelect = document.getElementById('formatSelect');
+        const convertBtn = document.getElementById('convertBtn');
+        const resultCard = document.getElementById('resultCard');
+        const fileList = document.getElementById('fileList');
+        const zipBtn = document.getElementById('zipBtn');
+
+        let selectedFiles = [];
+        let convertedFilesData = [];
+        let isConverting = false;
+
+        ['dragenter', 'dragover'].forEach(name => {
+            dropZone.addEventListener(name, (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        });
+        ['dragleave', 'drop'].forEach(name => {
+            dropZone.addEventListener(name, (e) => { e.preventDefault(); dropZone.classList.remove('dragover'); });
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const files = Array.from(e.dataTransfer.files);
+            if (files.length > 0) handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) handleFiles(files);
+        });
+
+        function handleFiles(files) {
+            selectedFiles = files;
+            convertedFilesData = [];
+            formatSelect.innerHTML = '';
+            resultCard.style.display = 'none';
+            zipBtn.style.display = 'none';
+            fileList.innerHTML = '';
+
+            const isAllImages = selectedFiles.every(f => f.type.startsWith('image/'));
+            const isAllPdfs = selectedFiles.every(f => f.type === 'application/pdf');
+
+            if (isAllImages) {
+                const formats = [
+                    { val: 'pdf', text: 'PDF Document (.pdf)' },
+                    { val: 'png', text: 'PNG Image (.png)' },
+                    { val: 'jpeg', text: 'JPG Image (.jpg)' },
+                    { val: 'webp', text: 'WEBP Image (.webp)' }
+                ];
+                formats.forEach(f => {
+                    const opt = document.createElement('option');
+                    opt.value = f.val;
+                    opt.textContent = f.text;
+                    formatSelect.appendChild(opt);
+                });
+                formatSelect.disabled = false;
+                convertBtn.disabled = false;
+                convertBtn.textContent = `${translations[currentLang].convertBtn} (${selectedFiles.length})`;
+            } else if (isAllPdfs) {
+                const opt = document.createElement('option');
+                opt.value = 'png';
+                opt.textContent = 'PNG Image (.png)';
+                formatSelect.appendChild(opt);
+                formatSelect.disabled = false;
+                convertBtn.disabled = false;
+                convertBtn.textContent = `${translations[currentLang].convertBtn} (${selectedFiles.length})`;
+            } else {
+                alert(translations[currentLang].invalidFile);
+                formatSelect.disabled = true;
+                convertBtn.disabled = true;
+            }
+        }
+
+        convertBtn.addEventListener('click', async () => {
+            if (selectedFiles.length === 0) return;
+
+            isConverting = true;
+            convertBtn.disabled = true;
+            convertBtn.textContent = translations[currentLang].convertingText;
+            fileList.innerHTML = '';
+            convertedFilesData = [];
+
+            const targetFormat = formatSelect.value;
+
+            for (let file of selectedFiles) {
+                try {
+                    let blob, newName;
+                    const originalNameWithoutExt = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+
+                    if (file.type.startsWith('image/') && targetFormat === 'pdf') {
+                        blob = await convertImageToPdf(file);
+                        newName = `${originalNameWithoutExt}.pdf`;
+                    } else if (file.type.startsWith('image/')) {
+                        blob = await convertImageToImage(file, targetFormat);
+                        newName = `${originalNameWithoutExt}.${targetFormat === 'jpeg' ? 'jpg' : targetFormat}`;
+                    } else if (file.type === 'application/pdf' && targetFormat === 'png') {
+                        blob = await convertPdfToPng(file);
+                        newName = `${originalNameWithoutExt}.png`;
+                    }
+
+                    if (blob) {
+                        convertedFilesData.push({ name: newName, blob: blob });
+                        addFileToResultList(newName, blob);
+                    }
+                } catch (err) {
+                    console.error('Conversion failed for ' + file.name, err);
+                }
+            }
+
+            resultCard.style.display = 'flex';
+            if (convertedFilesData.length > 1) {
+                zipBtn.style.display = 'block';
+            } else {
+                zipBtn.style.display = 'none';
+            }
+
+            isConverting = false;
+            convertBtn.disabled = false;
+            convertBtn.textContent = `${translations[currentLang].convertBtn} (${selectedFiles.length})`;
+        });
+
+        zipBtn.addEventListener('click', () => {
+            if (convertedFilesData.length === 0) return;
+            const zip = new JSZip();
+
+            convertedFilesData.forEach(item => {
+                zip.file(item.name, item.blob);
+            });
+
+            zip.generateAsync({ type: "blob" }).then(content => {
+                saveAs(content, "converted_files.zip");
+            });
+        });
+
+        function addFileToResultList(fileName, blob) {
+            const url = URL.createObjectURL(blob);
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            item.innerHTML = `
+                <span class="file-name">${fileName}</span>
+                <a href="${url}" download="${fileName}" class="download-single-btn">${translations[currentLang].downloadBtn}</a>
+            `;
+            fileList.appendChild(item);
+        }
+
+        async function convertImageToPdf(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdfDoc = await PDFLib.PDFDocument.create();
+            let image;
+
+            if (file.type === 'image/jpeg') {
+                image = await pdfDoc.embedJpg(arrayBuffer);
+            } else if (file.type === 'image/png') {
+                image = await pdfDoc.embedPng(arrayBuffer);
+            } else {
+                const pngBuffer = await imageToPngBuffer(file);
+                image = await pdfDoc.embedPng(pngBuffer);
+            }
+
+            const page = pdfDoc.addPage([image.width, image.height]);
+            page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
+
+            const pdfBytes = await pdfDoc.save();
+            return new Blob([pdfBytes], { type: 'application/pdf' });
+        }
+
+        function convertImageToImage(file, targetFormat) {
+            return new Promise(async (resolve) => {
+                const img = await loadImage(file);
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+
+                const mimeType = `image/${targetFormat}`;
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, mimeType, 0.92);
+            });
+        }
+
+        async function convertPdfToPng(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            const page = await pdf.getPage(1);
+
+            const viewport = page.getViewport({ scale: 2.0 });
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+            return new Promise((resolve) => {
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, 'image/png');
+            });
+        }
+
+        function loadImage(file) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        function imageToPngBuffer(file) {
+            return new Promise(async (resolve) => {
+                const img = await loadImage(file);
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob(async (blob) => {
+                    resolve(await blob.arrayBuffer());
+                }, 'image/png');
+            });
+        }
+
+        const savedLang = localStorage.getItem('selectedLang') || 'en';
+        setLanguage(savedLang);
+
+        function acceptCookies() {
+            localStorage.setItem('cookieAccepted', 'true');
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+        if (localStorage.getItem('cookieAccepted') === 'true') {
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

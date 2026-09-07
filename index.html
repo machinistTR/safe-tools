@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Safe Tools | Free Privacy-Focused Web Tools</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+
+        .lang-switcher {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.5rem;
+            display: flex;
+            gap: 0.3rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 0.3rem;
+            border-radius: 8px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #0f172a;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p.mission {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.5;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.8rem;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .tool-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .tool-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .tool-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switcher">
+        <button class="lang-btn active" id="btn-en" onclick="changeLang('en')">EN</button>
+        <button class="lang-btn" id="btn-tr" onclick="changeLang('tr')">TR</button>
+        <button class="lang-btn" id="btn-de" onclick="changeLang('de')">DE</button>
+    </div>
+
+    <div class="container">
+        <header>
+            <span class="badge" id="badgeText">⚡ Serverless Processing • 100% Private & Secure</span>
+            <h1 id="mainTitle">Safe & Fast Web Tools</h1>
+            <p class="mission" id="missionText">
+                Tired of uploading your sensitive files to unknown servers? 
+                Our open-source tools run <strong>entirely inside your browser</strong>. 
+                No files are stored, saved, or uploaded to any server.
+            </p>
+        </header>
+
+        <div class="tools-grid">
+            <a href="donusturucu.html" class="tool-card">
+                <span class="tool-icon">🔄</span>
+                <h3 id="card1Title">Image & PDF Converter</h3>
+                <p id="card1Desc">Convert JPG, PNG, and PDF files instantly and completely securely in your browser.</p>
+            </a>
+
+            <a href="sikistirici.html" class="tool-card">
+                <span class="tool-icon">✂️</span>
+                <h3 id="card2Title">Image Compressor</h3>
+                <p id="card2Desc">Compress image file sizes instantly without losing quality.</p>
+            </a>
+        </div>
+    </div>
+
+    <footer style="margin-top: 4rem; text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem; color: var(--text-muted); font-size: 0.85rem;">
+        <p id="footerText">© 2026 Safe Tools • <a href="privacy.html" style="color: var(--accent); text-decoration: none;" id="privacyLink">Privacy Policy</a></p>
+    </footer>
+
+    <div id="cookieBanner" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #1e293b; border-top: 1px solid #334155; padding: 1rem; text-align: center; color: #94a3b8; font-size: 0.85rem; z-index: 9999; display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <span id="cookieText">We use cookies to improve user experience and deliver ads. <a href="privacy.html" style="color: #38bdf8; text-decoration: none;" id="cookiePrivacyLink">Privacy Policy</a></span>
+        <button onclick="acceptCookies()" style="background-color: #38bdf8; color: #0f172a; border: none; padding: 0.4rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer;" id="cookieBtn">Got it</button>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                pageTitle: "Safe Tools | Free Privacy-Focused Web Tools",
+                badgeText: " Serverless Processing • 100% Private & Secure",
+                mainTitle: "Safe & Fast Web Tools",
+                missionText: "Tired of uploading your sensitive files to unknown servers? Our tools run <strong>entirely inside your browser</strong>. No files are stored, saved, or uploaded to any server.",
+                card1Title: "Image & PDF Converter",
+                card1Desc: "Convert JPG, PNG, and PDF files instantly and completely securely in your browser.",
+                card2Title: "Image Compressor",
+                card2Desc: "Compress image file sizes instantly without losing quality.",
+                footerText: "© 2026 Safe Tools • ",
+                privacyLink: "Privacy Policy",
+                cookieText: "We use cookies to improve user experience and deliver ads. ",
+                cookiePrivacyLink: "Privacy Policy",
+                cookieBtn: "Got it"
+            },
+            tr: {
+                pageTitle: "Güvenli Araçlar | Gizlilik Odaklı Ücretsiz Web Araçları",
+                badgeText: " Sunucusuz İşlem • %100 Gizli • %100 Güvenli",
+                mainTitle: "Güvenli & Hızlı Web Araçları",
+                missionText: "Hassas dosyalarınızı tanımadığınız sunuculara yüklemekten yorulmadınız mı? Araçlarımız <strong>tamamen tarayıcınızın içinde</strong> çalışır. Hiçbir veriniz kaydedilmez veya sunucuya gönderilmez.",
+                card1Title: "Görsel & PDF Dönüştürücü",
+                card1Desc: "JPG, PNG ve PDF dosyalarınızı anında ve tamamen güvenli dönüştürün.",
+                card2Title: "Görsel Sıkıştırıcı",
+                card2Desc: "Fotoğraflarınızın boyutunu kaliteyi bozmadan anında ve güvenle küçültün.",
+                footerText: "© 2026 Güvenli Araçlar • ",
+                privacyLink: "Gizlilik Politikası",
+                cookieText: "Bu sitede deneyimi iyileştirmek ve reklam sunmak amacıyla çerezler kullanılır. ",
+                cookiePrivacyLink: "Gizlilik Politikası",
+                cookieBtn: "Anladım"
+            },
+            de: {
+                pageTitle: "Sichere Werkzeuge | Kostenlose datenschutzorientierte Web-Tools",
+                badgeText: " Serverlose Verarbeitung • 100% Privat & Sicher",
+                mainTitle: "Sichere & Schnelle Web-Tools",
+                missionText: "Sind Sie es leid, Ihre vertraulichen Dateien auf unbekannte Server hochzuladen? Unsere Tools laufen <strong>vollständig in Ihrem Browser</strong>. Es werden keine Dateien gespeichert oder auf einen Server hochgeladen.",
+                card1Title: "Bild- & PDF-Konverter",
+                card1Desc: "Konvertieren Sie JPG-, PNG- und PDF-Dateien sofort und vollkommen sicher in Ihrem Browser.",
+                card2Title: "Bildkomprimierer",
+                card2Desc: "Komprimieren Sie die Dateigröße von Bildern sofort ohne Qualitätsverlust.",
+                footerText: "© 2026 Sichere Werkzeuge • ",
+                privacyLink: "Datenschutzerklärung",
+                cookieText: "Wir verwenden Cookies, um die Nutzererfahrung zu verbessern und Werbung bereitzustellen. ",
+                cookiePrivacyLink: "Datenschutzerklärung",
+                cookieBtn: "Verstanden"
+            }
+        };
+
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.getElementById('pageTitle').textContent = translations[lang].pageTitle;
+            document.getElementById('badgeText').textContent = translations[lang].badgeText;
+            document.getElementById('mainTitle').textContent = translations[lang].mainTitle;
+            document.getElementById('missionText').innerHTML = translations[lang].missionText;
+            document.getElementById('card1Title').textContent = translations[lang].card1Title;
+            document.getElementById('card1Desc').textContent = translations[lang].card1Desc;
+            document.getElementById('card2Title').textContent = translations[lang].card2Title;
+            document.getElementById('card2Desc').textContent = translations[lang].card2Desc;
+            
+            document.getElementById('footerText').childNodes[0].textContent = translations[lang].footerText;
+            document.getElementById('privacyLink').textContent = translations[lang].privacyLink;
+            
+            document.getElementById('cookieText').childNodes[0].textContent = translations[lang].cookieText;
+            document.getElementById('cookiePrivacyLink').textContent = translations[lang].cookiePrivacyLink;
+            document.getElementById('cookieBtn').textContent = translations[lang].cookieBtn;
+
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
+            document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+
+            localStorage.setItem('selectedLang', lang);
+        }
+
+        function changeLang(lang) {
+            setLanguage(lang);
+        }
+
+        const savedLang = localStorage.getItem('selectedLang') || 'en';
+        setLanguage(savedLang);
+
+        function acceptCookies() {
+            localStorage.setItem('cookieAccepted', 'true');
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+        if (localStorage.getItem('cookieAccepted') === 'true') {
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Privacy Policy | Safe Tools</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+
+        .lang-switcher {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.5rem;
+            display: flex;
+            gap: 0.3rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 0.3rem;
+            border-radius: 8px;
+            z-index: 10;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #0f172a;
+        }
+
+        .nav-header {
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switcher">
+        <button class="lang-btn active" id="btn-en" onclick="changeLang('en')">EN</button>
+        <button class="lang-btn" id="btn-tr" onclick="changeLang('tr')">TR</button>
+        <button class="lang-btn" id="btn-de" onclick="changeLang('de')">DE</button>
+    </div>
+
+    <div class="nav-header">
+        <a href="index.html" class="back-link" id="backLink">← Back to Home</a>
+    </div>
+
+    <div class="container">
+        <h1 id="mainTitle">Privacy Policy</h1>
+        
+        <h2 id="sec1Title">1. Complete Data Privacy</h2>
+        <p id="sec1Text">Safe Tools provides web tools designed with user privacy as the top priority. All conversion and compression operations are processed 100% inside your browser using client-side WebAssembly and JavaScript technology. No files, documents, or images are uploaded to external servers or stored anywhere.</p>
+
+        <h2 id="sec2Title">2. Cookies and Advertisements</h2>
+        <p id="sec2Text">Our site uses third-party advertising services (such as Google AdSense) to keep services free. Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites.</p>
+
+        <h2 id="sec3Title">3. Analytics & Logs</h2>
+        <p id="sec3Text">Standard anonymous access logs (IP address, browser type, visit time) may be processed automatically by hosting providers for security and server optimization purposes only.</p>
+
+        <h2 id="sec4Title">4. Contact Us</h2>
+        <p id="sec4Text">If you have any questions regarding this privacy policy, you can contact us via our official website address.</p>
+    </div>
+
+    <footer style="margin-top: 4rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+        <p id="footerText">© 2026 Safe Tools • <a href="privacy.html" style="color: var(--accent); text-decoration: none;" id="privacyLink">Privacy Policy</a></p>
+    </footer>
+
+    <div id="cookieBanner" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #1e293b; border-top: 1px solid #334155; padding: 1rem; text-align: center; color: #94a3b8; font-size: 0.85rem; z-index: 9999; display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <span id="cookieText">We use cookies to improve user experience and deliver ads. <a href="privacy.html" style="color: #38bdf8; text-decoration: none;" id="cookiePrivacyLink">Privacy Policy</a></span>
+        <button onclick="acceptCookies()" style="background-color: #38bdf8; color: #0f172a; border: none; padding: 0.4rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer;" id="cookieBtn">Got it</button>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                pageTitle: "Privacy Policy | Safe Tools",
+                backLink: "← Back to Home",
+                mainTitle: "Privacy Policy",
+                sec1Title: "1. Complete Data Privacy",
+                sec1Text: "Safe Tools provides web tools designed with user privacy as the top priority. All conversion and compression operations are processed 100% inside your browser using client-side WebAssembly and JavaScript technology. No files, documents, or images are uploaded to external servers or stored anywhere.",
+                sec2Title: "2. Cookies and Advertisements",
+                sec2Text: "Our site uses third-party advertising services (such as Google AdSense) to keep services free. Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites.",
+                sec3Title: "3. Analytics & Logs",
+                sec3Text: "Standard anonymous access logs (IP address, browser type, visit time) may be processed automatically by hosting providers for security and server optimization purposes only.",
+                sec4Title: "4. Contact Us",
+                sec4Text: "If you have any questions regarding this privacy policy, you can contact us via our official website address.",
+                footerText: "© 2026 Safe Tools • ",
+                privacyLink: "Privacy Policy",
+                cookieText: "We use cookies to improve user experience and deliver ads. ",
+                cookiePrivacyLink: "Privacy Policy",
+                cookieBtn: "Got it"
+            },
+            tr: {
+                pageTitle: "Gizlilik Politikası | Güvenli Araçlar",
+                backLink: "← Ana Sayfaya Dön",
+                mainTitle: "Gizlilik Politikası",
+                sec1Title: "1. Tam Veri Gizliliği",
+                sec1Text: "Güvenli Araçlar, kullanıcı gizliliğini en ön planda tutacak şekilde tasarlanmış web araçları sunar. Tüm dönüştürme ve sıkıştırma işlemleri %100 tarayıcınızın içinde WebAssembly ve JavaScript teknolojileri ile gerçekleşir. Hiçbir dosyanız veya belgeniz harici sunuculara yüklenmez ve hiçbir yerde saklanmaz.",
+                sec2Title: "2. Çerezler ve Reklamlar",
+                sec2Text: "Sitemiz, hizmetleri ücretsiz tutabilmek amacıyla üçüncü taraf reklam hizmetleri (Google AdSense gibi) kullanabilir. Google dahil üçüncü taraf tedarikçiler, kullanıcıların web sitemize veya diğer web sitelerine yaptığı önceki ziyaretlere dayanarak reklam sunmak için çerezleri kullanır.",
+                sec3Title: "3. Analiz ve Günlükler",
+                sec3Text: "Standart anonim erişim günlükleri (IP adresi, tarayıcı türü, ziyaret zamanı) yalnızca güvenlik ve sunucu optimizasyonu amacıyla barındırma sağlayıcıları tarafından otomatik işlenebilir.",
+                sec4Title: "4. İletişim",
+                sec4Text: "Gizlilik politikamızla ilgili herhangi bir sorunuz varsa, resmi web sitesi adresimiz üzerinden bizimle iletişime geçebilirsiniz.",
+                footerText: "© 2026 Güvenli Araçlar • ",
+                privacyLink: "Gizlilik Politikası",
+                cookieText: "Bu sitede deneyimi iyileştirmek ve reklam sunmak amacıyla çerezler kullanılır. ",
+                cookiePrivacyLink: "Gizlilik Politikası",
+                cookieBtn: "Anladım"
+            },
+            de: {
+                pageTitle: "Datenschutzerklärung | Sichere Werkzeuge",
+                backLink: "← Zurück zur Startseite",
+                mainTitle: "Datenschutzerklärung",
+                sec1Title: "1. Vollständiger Datenschutz",
+                sec1Text: "Sichere Werkzeuge bietet Web-Tools, bei denen der Schutz der Nutzerdaten an erster Stelle steht. Alle Konvertierungs- und Komprimierungsvorgänge werden zu 100% in Ihrem Browser verarbeitet. Es werden keine Dateien, Dokumente oder Bilder auf externe Server hochgeladen oder gespeichert.",
+                sec2Title: "2. Cookies und Werbung",
+                sec2Text: "Unsere Website verwendet Werbedienste von Drittanbietern (wie Google AdSense), um die Dienste kostenlos anzubieten. Drittanbieter, einschließlich Google, verwenden Cookies, um Anzeigen basierend auf vorherigen Visits eines Nutzers zu schalten.",
+                sec3Title: "3. Analysen & Protokolle",
+                sec3Text: "Standardmäßige anonyme Zugriffsprotokolle (IP-Adresse, Browsertyp, Zugriffszeit) können von Hosting-Anbietern ausschließlich aus Sicherheits- und Optimierungsgründen verarbeitet werden.",
+                sec4Title: "4. Kontakt",
+                sec4Text: "Wenn Sie Fragen zu dieser Datenschutzerklärung haben, können Sie uns über unsere offizielle Website kontaktieren.",
+                footerText: "© 2026 Sichere Werkzeuge • ",
+                privacyLink: "Datenschutzerklärung",
+                cookieText: "Wir verwenden Cookies, um die Nutzererfahrung zu verbessern und Werbung bereitzustellen. ",
+                cookiePrivacyLink: "Datenschutzerklärung",
+                cookieBtn: "Verstanden"
+            }
+        };
+
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.getElementById('pageTitle').textContent = translations[lang].pageTitle;
+            document.getElementById('backLink').textContent = translations[lang].backLink;
+            document.getElementById('mainTitle').textContent = translations[lang].mainTitle;
+            document.getElementById('sec1Title').textContent = translations[lang].sec1Title;
+            document.getElementById('sec1Text').textContent = translations[lang].sec1Text;
+            document.getElementById('sec2Title').textContent = translations[lang].sec2Title;
+            document.getElementById('sec2Text').textContent = translations[lang].sec2Text;
+            document.getElementById('sec3Title').textContent = translations[lang].sec3Title;
+            document.getElementById('sec3Text').textContent = translations[lang].sec3Text;
+            document.getElementById('sec4Title').textContent = translations[lang].sec4Title;
+            document.getElementById('sec4Text').textContent = translations[lang].sec4Text;
+
+            document.getElementById('footerText').childNodes[0].textContent = translations[lang].footerText;
+            document.getElementById('privacyLink').textContent = translations[lang].privacyLink;
+            
+            document.getElementById('cookieText').childNodes[0].textContent = translations[lang].cookieText;
+            document.getElementById('cookiePrivacyLink').textContent = translations[lang].cookiePrivacyLink;
+            document.getElementById('cookieBtn').textContent = translations[lang].cookieBtn;
+
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
+            document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+
+            localStorage.setItem('selectedLang', lang);
+        }
+
+        function changeLang(lang) {
+            setLanguage(lang);
+        }
+
+        const savedLang = localStorage.getItem('selectedLang') || 'en';
+        setLanguage(savedLang);
+
+        function acceptCookies() {
+            localStorage.setItem('cookieAccepted', 'true');
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+        if (localStorage.getItem('cookieAccepted') === 'true') {
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
